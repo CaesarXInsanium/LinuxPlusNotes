@@ -60,16 +60,17 @@ def partition():
     luks = input("Name Crypt Volume >")
     sub.run(["cryptsetup", "luksOpen", root_part, luks])
     luks = f"/dev/mapper/{luks}"
+    sub.run(["mkfs.btrfs", luks])
     sub.run(["mount", luks, TARGET_DIR])
 
-    sub.run(["btrs", "su", "cr", f"{TARGET_DIR}/@"])
+    sub.run(["btrfs", "su", "cr", f"{TARGET_DIR}/@"])
     for vol in SUBVOLUMES:
         sub.run(["btrfs", "su", "cr", f"{TARGET_DIR}/@{vol}"])
 
     sub.run(["umount", TARGET_DIR])
-    sub.run(["mount", "-o", ])
+    opts = ",".join(SUBVOL_OPTIONS)
+    sub.run(["mount", "-o", f"{opts},subvol=@", luks, f"{TARGET_DIR}"])
     for vol in SUBVOLUMES:
-        opts = ",".join(SUBVOL_OPTIONS)
         sub.run(["mkdir", f"{TARGET_DIR}/{vol}"])
         sub.run(
             ["mount", "-o", f"{opts},subvol=@{vol}", luks, f"{TARGET_DIR}/{vol}"])
