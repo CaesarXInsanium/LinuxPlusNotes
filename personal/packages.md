@@ -4,7 +4,7 @@
 
 - arch-install-scripts
 - cryptsetup
-- cryptsetup-initramfs 
+- cryptsetup-initramfs
 - zstd
 - vim
 - grub2
